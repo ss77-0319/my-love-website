@@ -1,17 +1,133 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>写给你</title>
-  <link rel="stylesheet" href="style.css">
+  <title>我们的回忆相册</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #fff0f5;
+      font-family: '微软雅黑', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .carousel {
+      position: relative;
+      width: 80%;
+      max-width: 600px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    .carousel img {
+      width: 100%;
+      display: none;
+    }
+    .carousel img.active {
+      display: block;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+    .controls button {
+      padding: 8px 16px;
+      border: none;
+      background-color: #ff69b4;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color .3s;
+    }
+    .controls button:hover {
+      background-color: #ff1493;
+    }
+  </style>
 </head>
 <body>
-  <h1>亲爱的你 ❤️</h1>
-  <p>在我生命中最美好的事情，就是遇见了你。</p>
-  <p>你的笑，是我每天最大的动力。</p>
-  <p>愿我们一直这样走下去，不管未来多远。</p>
-  <p>—— 永远爱你的某某 💌</p>
 
-  <a class="btn" href="index.html">返回首页</a>
+  <h1>回忆相册 ✨</h1>
+  
+  <div class="carousel">
+    <!-- 这里的 img 标签会被 JS 激活 -->
+    <img src="images/photo1.jpg" alt="照片1" class="active">
+    <img src="images/photo2.jpg" alt="照片2">
+    <img src="images/photo3.jpg" alt="照片3">
+    <!-- 按需增加更多 -->
+  </div>
+
+  <div class="controls">
+    <button id="prev">上一张</button>
+    <button id="play-pause">暂停</button>
+    <button id="next">下一张</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.carousel img');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const playPauseBtn = document.getElementById('play-pause');
+
+    let current = 0;
+    let isPlaying = true;
+    const intervalTime = 3000; // 自动切换间隔（毫秒）
+    let slideInterval;
+
+    // 显示第 idx 张
+    function showSlide(idx) {
+      slides[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    }
+
+    // 下一张
+    function nextSlide() {
+      showSlide(current + 1);
+    }
+
+    // 上一张
+    function prevSlide() {
+      showSlide(current - 1);
+    }
+
+    // 播放 / 暂停 切换
+    function playPause() {
+      if (isPlaying) {
+        clearInterval(slideInterval);
+        playPauseBtn.textContent = '播放';
+      } else {
+        slideInterval = setInterval(nextSlide, intervalTime);
+        playPauseBtn.textContent = '暂停';
+      }
+      isPlaying = !isPlaying;
+    }
+
+    // 绑定事件
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      if (isPlaying) {  // 重置定时器
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, intervalTime);
+      }
+    });
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      if (isPlaying) {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, intervalTime);
+      }
+    });
+    playPauseBtn.addEventListener('click', playPause);
+
+    // 初始化自动播放
+    slideInterval = setInterval(nextSlide, intervalTime);
+  </script>
+
 </body>
 </html>
