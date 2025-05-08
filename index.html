@@ -38,22 +38,21 @@
 <body>
   <h1>别点我，我还没准备好…好吧，点就点！😂</h1>
 
-  <!-- 背景音播放器（隐藏） -->
-  <audio id="bg-music" loop hidden>
-    <source src="audio/兜圈.mp3" type="audio/mpeg">
-    你的浏览器不支持 audio 元素。
+  <audio id="bg-music" loop controls>
+    <source src="audio/music.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- 播放触发按钮 -->
-  <button  id="play-btn" class="btn" href="page2.html">点我干嘛？</button >
+  <!-- 用 button，不带 href -->
+  <button id="play-btn" class="btn">点我干嘛？</button>
 
   <script>
     const music = document.getElementById('bg-music');
     music.loop = true;
-
     document.getElementById('play-btn').addEventListener('click', () => {
-      music.volume = 0.6;      // 设置初始音量为 60%
+      music.load();
+      music.volume = 0.6;
       music.play().catch(err => console.warn(err));
+      // 播放后跳转
       window.location.href = 'page2.html';
     });
   </script>
